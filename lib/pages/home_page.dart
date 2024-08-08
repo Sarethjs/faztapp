@@ -1,6 +1,7 @@
 import 'package:faztapp/components/my_drawer.dart';
 import 'package:faztapp/components/user_tile.dart';
 import 'package:faztapp/pages/chat_page.dart';
+import 'package:faztapp/pages/friends_page.dart';
 import 'package:faztapp/services/chat/chat_service.dart';
 import 'package:flutter/material.dart';
 
@@ -18,6 +19,13 @@ class HomePage extends StatelessWidget {
       ),
       drawer: const MyDrawer(),
       body: _buildUserList(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const FriendsPage()));
+        },
+        child: const Icon(Icons.edit),
+      ),
     );
   }
 
