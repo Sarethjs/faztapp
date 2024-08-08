@@ -10,6 +10,7 @@ class RegisterPage extends StatelessWidget {
 
   // email and password controller
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _userNameController = TextEditingController();
   final TextEditingController _pwController = TextEditingController();
   final TextEditingController _confirmPwController = TextEditingController();
 
@@ -81,6 +82,17 @@ class RegisterPage extends StatelessWidget {
             const SizedBox(
               height: 25,
             ),
+
+            // username text field
+            MyTextField(
+                hintText: "Username",
+                obscureText: false,
+                controller: _userNameController),
+
+            const SizedBox(
+              height: 25,
+            ),
+
             // password text field
             MyTextField(
               hintText: 'Password',
