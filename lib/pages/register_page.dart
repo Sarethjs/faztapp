@@ -1,6 +1,7 @@
 import "package:faztapp/auth/auth_service.dart";
 import "package:faztapp/components/my_button.dart";
 import "package:faztapp/components/my_textfield.dart";
+import "package:faztapp/dto/user/register_user_dto.dart";
 import "package:flutter/material.dart";
 
 class RegisterPage extends StatelessWidget {
@@ -31,8 +32,14 @@ class RegisterPage extends StatelessWidget {
 
     // Sign up user
     try {
-      await authService.signUpWithEmailPassword(
-          _emailController.text, _pwController.text);
+      // create RegisterUserDto
+      final RegisterUserDto registerUserDto = RegisterUserDto(
+          email: _emailController.text,
+          userName: _userNameController.text,
+          password: _pwController.text);
+
+      // Register user
+      await authService.signUpWithEmailPassword(registerUserDto);
     } catch (e) {
       if (context.mounted) {
         showDialog(
