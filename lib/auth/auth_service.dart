@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:faztapp/dto/user/register_user_dto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
@@ -20,16 +21,18 @@ class AuthService {
 
   // sign up
   Future<UserCredential> signUpWithEmailPassword(
-      String email, String password) async {
+      RegisterUserDto userDto) async {
     try {
       // create user in auth module from Firebase
-      UserCredential userCredential = await _auth
-          .createUserWithEmailAndPassword(email: email, password: password);
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
+              email: userDto.email, password: userDto.password);
 
       // save user in Firestore
       _firestore.collection("Users").doc(userCredential.user!.uid).set({
         "uuid": userCredential.user!.uid,
-        "email": userCredential.user!.email
+        "email": userCredential.user!.email,
+        "username": userDto.userName,
       });
       return userCredential;
     } on FirebaseAuthException catch (e) {
