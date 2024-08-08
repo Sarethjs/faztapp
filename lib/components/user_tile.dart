@@ -14,12 +14,15 @@ class UserTile extends StatelessWidget {
         decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.secondary,
             borderRadius: BorderRadius.circular(12.0)),
-        margin: const EdgeInsets.all(8),
-        padding: const EdgeInsets.all(8),
+        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
         child: Row(
           children: [
             // icon chat
-            const Icon(Icons.person),
+            const Icon(
+              Icons.person_sharp,
+              size: 30,
+            ),
 
             // username
             Text(text)
