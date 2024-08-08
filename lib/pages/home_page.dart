@@ -1,9 +1,7 @@
-import 'package:faztapp/auth/auth_service.dart';
 import 'package:faztapp/components/my_drawer.dart';
 import 'package:faztapp/components/user_tile.dart';
 import 'package:faztapp/pages/chat_page.dart';
 import 'package:faztapp/services/chat/chat_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
@@ -11,7 +9,6 @@ class HomePage extends StatelessWidget {
 
   // chat & auth service
   final ChatService _chatService = ChatService();
-  final AuthService _auth = AuthService();
 
   @override
   Widget build(BuildContext context) {
