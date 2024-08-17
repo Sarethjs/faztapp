@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:faztapp/components/chat_bubble.dart';
 import 'package:faztapp/components/my_textfield.dart';
 import 'package:faztapp/services/chat/chat_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -82,23 +83,51 @@ class ChatPage extends StatelessWidget {
   // build message item
   Widget _buildMessageItem(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-    return Text(data['message']);
+
+    // is current user
+    bool isCurrentUser = data['senderID'] == _authService.currentUser!.uid;
+
+    // align message to the right if sender is the current user, otherwise left
+    var aligment = isCurrentUser ? Alignment.centerRight : Alignment.centerLeft;
+
+    return Container(
+      alignment: aligment,
+      child: Column(
+        crossAxisAlignment:
+            isCurrentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        children: [
+          ChatBubble(message: data['message'], isCurrentUser: isCurrentUser),
+        ],
+      ),
+    );
   }
 
   // build message input
   Widget _buildUserInput() {
-    return Row(
-      children: [
-        // textfield should take up most of the space
-        Expanded(
-            child: MyTextField(
-          controller: messageController,
-          hintText: 'Message',
-          obscureText: false,
-        )),
-        // send button
-        IconButton(onPressed: sendMessage, icon: const Icon(Icons.send)),
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16, right: 16),
+      child: Row(
+        children: [
+          // textfield should take up most of the space
+          Expanded(
+              child: MyTextField(
+            controller: messageController,
+            hintText: 'Message',
+            obscureText: false,
+          )),
+          // send button
+          Container(
+            decoration: const BoxDecoration(
+                color: Colors.green, shape: BoxShape.circle),
+            child: IconButton(
+                onPressed: sendMessage,
+                icon: const Icon(
+                  Icons.send,
+                  color: Colors.white,
+                )),
+          ),
+        ],
+      ),
     );
   }
 }
