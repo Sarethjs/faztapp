@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:faztapp/components/chat_bubble.dart';
-import 'package:faztapp/components/my_textfield.dart';
+import 'package:faztapp/components/message_field.dart';
 import 'package:faztapp/services/chat/chat_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class ChatPage extends StatelessWidget {
-  ChatPage({
+class ChatPage extends StatefulWidget {
+  const ChatPage({
     super.key,
     required this.userName,
     required this.receiverID,
@@ -15,12 +15,63 @@ class ChatPage extends StatelessWidget {
   final String receiverID;
   final String userName;
 
+  @override
+  State<ChatPage> createState() => _ChatPageState();
+}
+
+class _ChatPageState extends State<ChatPage> {
   // Message text controller
   final TextEditingController messageController = TextEditingController();
 
   // chat & auth service
   final ChatService _chatService = ChatService();
+
   final FirebaseAuth _authService = FirebaseAuth.instance;
+
+  // for textfield focus
+  FocusNode myFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+
+    // add listener to focus node
+    myFocusNode.addListener(() {
+      if (myFocusNode.hasFocus) {
+        // cause a delay so that keyboard has time to show up
+        // then the amount of remaining space will be calculated
+        // then scroll down
+        Future.delayed(
+          const Duration(milliseconds: 500),
+          () => scrollDown(),
+        );
+      }
+    });
+
+    // wait a bit for listview to be built, then scroll to bottom
+    Future.delayed(
+      const Duration(milliseconds: 500),
+      () => scrollDown(),
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    myFocusNode.dispose();
+    messageController.dispose();
+  }
+
+  // scroll controller
+  final ScrollController _scrollController = ScrollController();
+
+  void scrollDown() {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: const Duration(seconds: 1),
+      curve: Curves.fastOutSlowIn,
+    );
+  }
 
   // send message
   void sendMessage() async {
@@ -28,12 +79,15 @@ class ChatPage extends StatelessWidget {
     if (messageController.text.isNotEmpty) {
       // send the message
       await _chatService.sendMessage(
-        receiverID,
+        widget.receiverID,
         messageController.text,
       );
 
       // clear textfield
       messageController.clear();
+
+      // scroll down messaages
+      scrollDown();
     }
   }
 
@@ -43,7 +97,7 @@ class ChatPage extends StatelessWidget {
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         title: Text(
-          userName,
+          widget.userName,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.transparent,
@@ -66,7 +120,7 @@ class ChatPage extends StatelessWidget {
   Widget _buildMessageList() {
     String senderID = _authService.currentUser!.uid;
     return StreamBuilder(
-      stream: _chatService.getMessages(senderID, receiverID),
+      stream: _chatService.getMessages(senderID, widget.receiverID),
       builder: (context, snapshot) {
         // if errors
         if (snapshot.hasError) {
@@ -80,6 +134,7 @@ class ChatPage extends StatelessWidget {
 
         // return list view
         return ListView(
+            controller: _scrollController,
             children: snapshot.data!.docs
                 .map((doc) => _buildMessageItem(doc))
                 .toList());
@@ -117,10 +172,10 @@ class ChatPage extends StatelessWidget {
         children: [
           // textfield should take up most of the space
           Expanded(
-              child: MyTextField(
+              child: MessageField(
             controller: messageController,
             hintText: 'Message',
-            obscureText: false,
+            focusNode: myFocusNode,
           )),
           // send button
           Container(
