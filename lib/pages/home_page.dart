@@ -25,11 +25,15 @@ class HomePage extends StatelessWidget {
       drawer: const MyDrawer(),
       body: _buildUserList(),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.green,
         onPressed: () {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const FriendsPage()));
         },
-        child: const Icon(Icons.edit),
+        child: const Icon(
+          Icons.add_comment,
+          color: Colors.white,
+        ),
       ),
     );
   }
