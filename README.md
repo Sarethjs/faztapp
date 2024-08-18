@@ -1,16 +1,21 @@
-# faztapp
+# FaztApp
 
-A new Flutter project.
+This is a simple chat application using Flutter and Firebase. It was created just for testing my skills
 
-## Getting Started
+## Goals
+- [x] Chat with other users
+- [ ] Add friends using QR
+- [ ] Add friends using email or username
+- [ ] Push notifications
+- [x] Dark mode
 
-This project is a starting point for a Flutter application.
+## Screenshots
 
-A few resources to get you started if this is your first Flutter project:
+### Login & register page
+![Screenshots](examples/register_login.jpg)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### App drawer
+![App Drawer](examples/drawer.jpeg)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Chat screen
+![Chat Screen](examples/chat_screen.jpeg)
