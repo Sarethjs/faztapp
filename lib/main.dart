@@ -1,4 +1,5 @@
 import 'package:faztapp/auth/auth_gate.dart';
+import 'package:faztapp/services/notifications/local_notification_service.dart';
 import 'package:faztapp/themes/theme_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,9 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+  // Notifications setup
+  LocalNotificationService().initNotification();
   runApp(
     ChangeNotifierProvider(
       create: (context) => ThemeProvider(),
